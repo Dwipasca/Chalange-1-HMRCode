@@ -1,8 +1,12 @@
 const Validator = require('validatorjs')
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const port = 8080;
 
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 
 app.get('/api/member', (req, res) => {
   res.status(200).json({
@@ -13,23 +17,23 @@ app.get('/api/member', (req, res) => {
 
 app.post('/api/member', (req, res) => {
   let input = {
-    'name': 'jane shepard',
-    'email': 'janeshepard@gmail.com'
+    'name': req.body.name,
+    'email': req.body.email
   }
   const rules = {
     'name': 'required|min:3',
     'email': 'required|email'
   }
 
-  const validation = new Validator(input, rules, {
+  const validasi = new Validator(input, rules, {
     "required.email": "Without an :attribute we can't reach you!"
   });
 
-  if (validation.fails()) {
+  if (validasi.fails()) {
     res.status(422).json({
       errors: {
-        name: 'name is required',
-        email: 'email is required'
+        name: validasi.errors.first('name'),
+        email: validasi.errors.first('email')
       }
     })
   } else {
@@ -37,8 +41,6 @@ app.post('/api/member', (req, res) => {
       'message': 'user has been created'
     })
   }
-
-
 
 })
 
