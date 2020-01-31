@@ -3,4 +3,5 @@ ReadMe Instruction
 # npm install validatorjs
 # npm install express --save
 
-
+eksekusi program
+# node app.js
